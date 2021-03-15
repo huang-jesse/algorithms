@@ -1,2 +1,2 @@
-# Algorithms-Part-I
+# Algorithms
 For learning
