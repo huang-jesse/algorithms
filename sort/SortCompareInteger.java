@@ -2,8 +2,8 @@ import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.Stopwatch;
 
-public class SortCompare {
-    public static double time(String alg, Double[] a) {
+public class SortCompareInteger {
+    public static double time(String alg, Integer[] a) {
         Stopwatch timer = new Stopwatch();
 
         if (alg.equals("MergeOriginal"))
@@ -21,10 +21,10 @@ public class SortCompare {
 
     public static double timeRandomInput(String alg, int N, int T) {
         double total = 0.0;
-        Double[] a = new Double[N];
+        Integer[] a = new Integer[N];
         for (int t = 0; t < T; t++) {
             for (int i = 0; i < N; i++)
-                a[i] = StdRandom.uniform();
+                a[i] = StdRandom.uniform(100);
             total += time(alg, a);
         }
         return total;

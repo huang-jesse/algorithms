@@ -1,23 +1,17 @@
 import java.util.Random;
 
 /**
- * InsertionSort
+ * BubbleSort
  */
-public class InsertionSort {
+public class Bubble {
 
     public static void sort(Comparable[] a) {
-        // for (int i = 0; i < a.length - 1; i++) {
-        //     for (int j = i+1; j > 0 && less(a[j], a[j-1]); j--) {
-        //         exch(a, j, j-1);
-        //     }
-        // }
-        sort(a, 0, a.length - 1);
-    }
-
-    public static void sort(Comparable[] a, int lo, int hi) {
-        for (int i = lo; i < hi; i++) {
-            for (int j = i+1; j > lo && less(a[j], a[j-1]); j--) {
-                exch(a, j, j-1);
+        int len = a.length;
+        for (int i = 0; i < len; i++) {
+            for (int j = len-1; j > i; j--) {
+                if (less(a[j], a[j-1])) {
+                    exch(a, j, j-1);
+                }
             }
         }
     }
@@ -47,7 +41,7 @@ public class InsertionSort {
     }
 
     public static void main(String[] args) {
-        Integer[] a = new Random().ints(1, 100).limit(100).boxed().toArray(Integer[]::new);
+        Integer[] a = new Random().ints(1, 100).limit(50).boxed().toArray(Integer[]::new);
         sort(a);
         System.out.println("Is sorted: " + isSorted(a));
         show(a);

@@ -3,7 +3,7 @@ import java.util.Random;
 /**
  * MergeBUSort
  */
-public class MergeBUSort {
+public class MergeBU {
 
     private static Comparable[] aux;
 
