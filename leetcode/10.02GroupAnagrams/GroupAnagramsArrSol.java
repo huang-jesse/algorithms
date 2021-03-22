@@ -1,35 +1,38 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-class GroupAnagrams {
+public class GroupAnagramsArrSol {
+
     /**
      * n: length of the strs
      * m: length of every str in strs
-     * total time complexity: O(n*(mlogm))
+     * total time complexity: O(n*m)
      * total space complexity: O(n)
     **/
     public static List<List<String>> groupAnagrams(String[] strs) {
         if (strs == null || strs.length == 0) return Collections.emptyList();
         // space complexity O(n)
-        Map<String, List<String>> mapStrs = new HashMap<>();
+        Map<IntArray, List<String>> mapStrs = new HashMap<>();
 
-        // time complexity O(n*(mlogm))
+        // time complexity O(n*m)
         for(String str : strs) {
-            // space complexity O(m)
-            char[] charArr = str.toCharArray();
-            // time complexity O(mlogm)
-            Arrays.sort(charArr);
-            String sortedStr = new String(charArr);
+            // space complexity O(26)
+            IntArray intArr = new IntArray();
+            int strLen = str.length();
+            // time complexity O(m)
+            for (int i = 0; i < strLen; i++) {
+                int charCode = str.charAt(i)-97;
+                intArr.set(charCode, intArr.get(charCode)+1);
+            }
 
-            List<String> strList = mapStrs.get(sortedStr);
+            List<String> strList = mapStrs.get(intArr);
             if (strList == null) {
                 strList = new ArrayList<>();
-                mapStrs.put(sortedStr, strList);
+                mapStrs.put(intArr, strList);
             }
             strList.add(str);
         }
@@ -38,9 +41,9 @@ class GroupAnagrams {
     }
 
     public static void main(String[] args) {
-        GroupAnagrams sol = new GroupAnagrams();
+        GroupAnagramsArrSol sol = new GroupAnagramsArrSol();
         // Set parameters
-        String[] testArr = new String[] {"abc", "bdc", "bca"};
+        String[] testArr = new String[] {"a", "z", "a", "az", "za", "aa", "zz"};
         // Do test
         List<List<String>> test = sol.groupAnagrams(testArr);
         System.out.println(test);
