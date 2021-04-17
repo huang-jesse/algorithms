@@ -14,7 +14,6 @@ public class Heap {
         // 下沉排序
         while (last > 1) {
             // 交换堆头和堆尾，不断将堆中最大的值放到堆尾（这部分已排序）
-            Comparable item = a[1];
             exch(a, 1, last);
             // 不断向前缩小堆的大小，重新修复交换后的堆
             sink(a, 1, --last);
@@ -32,7 +31,7 @@ public class Heap {
             k = j;
         }
     }
-    
+
     private static boolean less(Comparable[] a, int i, int j) {
         // 堆排序从1开始计数，因此i,j通过减1获取真实值
         return a[i-1].compareTo(a[j-1]) < 0;
@@ -62,7 +61,7 @@ public class Heap {
         }
         return true;
     }
-    
+
     public static void main(String[] args) {
         Integer[] a = new Random().ints(1, 100).limit(100).boxed().toArray(Integer[]::new);
         sort(a);
