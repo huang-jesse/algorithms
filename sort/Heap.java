@@ -7,7 +7,7 @@ public class Heap {
     public static void sort(Comparable[] a) {
         // 二叉堆，堆尾
         int last = a.length;
-        // 堆构造
+        // 堆构造（最大值为根节点）
         for (int k = last/2; k >= 1; k--) {
             sink(a, k, last);
         }
@@ -20,6 +20,12 @@ public class Heap {
         }
     }
 
+    /**
+     * 如果父节点k的值小于子节点(2*k, 2*k+1)，则下沉父节点。接着令k等于子节点，继续下沉操作。直到2*k>最后的元素last时结束循环
+     * @param a 排序数组
+     * @param k 父节点
+     * @param last 最后的元素last
+     */
     private static void sink(Comparable[] a, int k, int last) {
         while (2*k <= last) {
             int j = 2*k;
