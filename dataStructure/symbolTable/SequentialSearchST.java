@@ -112,7 +112,7 @@ public class SequentialSearchST<Key, Value> {
 
     public static void main(String[] args) {
         SequentialSearchST<String, Integer> st;
-        st = new SequentialSearchST<String, Integer>();
+        st = new SequentialSearchST<>();
         for (int i = 0; !StdIn.isEmpty() && i < 5; i++) {
             String key = StdIn.readString();
             st.put(key, i);
