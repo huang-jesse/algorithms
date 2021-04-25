@@ -1,3 +1,5 @@
+import java.util.TreeSet;
+
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
@@ -46,7 +48,6 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
     }
 
     private Node rotateLeft(Node h) {
-        // if (h == null) return null;
         Node x = h.right;
         h.right = x.left;
         x.left = h;
@@ -58,7 +59,6 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
     }
 
     private Node rotateRight(Node h) {
-        // if (h == null) return null;
         Node x = h.left;
         h.left = x.right;
         x.right = h;
@@ -92,10 +92,12 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 
     public void put(Key key, Value value) {
         root = put(root, key, value);
+        root.color = BLACK;
     }
 
     private Node put(Node x, Key key, Value value) {
-        if (x == null) return new Node(key, value, 1, BLACK);
+        if (x == null) return new Node(key, value, 1, RED);
+
         int cmp = key.compareTo(x.key);
         if (cmp < 0)
             x.left = put(x.left, key, value);
@@ -103,6 +105,11 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
             x.right = put(x.right, key, value);
         else
             x.value = value;
+
+        if (!isRed(x.left) && isRed(x.right)) x = rotateLeft(x);
+        if (isRed(x.left) && isRed(x.left.left)) x = rotateRight(x);
+        if (isRed(x.left) && isRed(x.right)) flipColors(x);
+
         x.size = size(x.left) + size(x.right) + 1;
         return x;
     }
@@ -227,10 +234,20 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 
     public void deleteMin() {
         if (root == null) return;
+        // handle root case
+        if (size() > 1) {
+
+        }
+
         root = deleteMin(root);
     }
 
     private Node deleteMin(Node x) {
+
+        // top to bottom
+        // only one case that the
+        if (!isRed(x.left) && )
+
         if (x.left == null) return x.right;
         x.left = deleteMin(x.left);
         x.size = size(x.left) + size(x.right) + 1;
