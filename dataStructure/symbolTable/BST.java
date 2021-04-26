@@ -33,6 +33,10 @@ public class BST<Key extends Comparable<Key>, Value> {
             return x.size;
     }
 
+    public boolean isEmpty() {
+        return size() == 0;
+    }
+
     public Value get(Key key) {
         return get(root, key);
     }

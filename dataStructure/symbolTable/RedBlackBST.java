@@ -1,4 +1,4 @@
-import java.util.TreeSet;
+import java.util.NoSuchElementException;
 
 import edu.princeton.cs.algs4.Queue;
 import edu.princeton.cs.algs4.StdIn;
@@ -42,6 +42,10 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
             return x.size;
     }
 
+    public boolean isEmpty() {
+        return size() == 0;
+    }
+
     private boolean isRed(Node x) {
         if (x == null) return false;
         return x.color == RED;
@@ -69,11 +73,11 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
         return x;
     }
 
-    private void flipColors(Node h) {
-        h.color = RED;
-        h.left.color = BLACK;
-        h.right.color = BLACK;
-    }
+    // private void flipColors(Node h) {
+    //     h.color = RED;
+    //     h.left.color = BLACK;
+    //     h.right.color = BLACK;
+    // }
 
     public Value get(Key key) {
         return get(root, key);
@@ -88,6 +92,17 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
             return get(x.right, key);
         else
             return x.value;
+    }
+    
+    /**
+     * Does this symbol table contain the given key?
+     * @param key the key
+     * @return {@code true} if this symbol table contains {@code key} and
+     *     {@code false} otherwise
+     * @throws IllegalArgumentException if {@code key} is {@code null}
+     */
+    public boolean contains(Key key) {
+        return get(key) != null;
     }
 
     public void put(Key key, Value value) {
@@ -232,61 +247,113 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
             return size(x.left)+1+rank(x.right, key);
     }
 
+    /**
+     * Removes the smallest key and associated value from the symbol table.
+     * @throws NoSuchElementException if the symbol table is empty
+     */
     public void deleteMin() {
-        if (root == null) return;
-        // handle root case
-        if (size() > 1) {
+        if (isEmpty()) throw new NoSuchElementException("BST underflow");
 
-        }
+        // if both children of root are black, set root to red
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = RED;
 
         root = deleteMin(root);
+        if (!isEmpty()) root.color = BLACK;
+        // assert check();
     }
 
-    private Node deleteMin(Node x) {
+    // delete the key-value pair with the minimum key rooted at h
+    private Node deleteMin(Node h) { 
+        if (h.left == null)
+            return null;
 
-        // top to bottom
-        // only one case that the
-        if (!isRed(x.left) && )
+        if (!isRed(h.left) && !isRed(h.left.left))
+            h = moveRedLeft(h);
 
-        if (x.left == null) return x.right;
-        x.left = deleteMin(x.left);
-        x.size = size(x.left) + size(x.right) + 1;
-        return x;
+        h.left = deleteMin(h.left);
+        return balance(h);
     }
 
+    /**
+     * Removes the largest key and associated value from the symbol table.
+     * @throws NoSuchElementException if the symbol table is empty
+     */
     public void deleteMax() {
-        if (root == null) return;
+        if (isEmpty()) throw new NoSuchElementException("BST underflow");
+
+        // if both children of root are black, set root to red
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = RED;
+
         root = deleteMax(root);
+        if (!isEmpty()) root.color = BLACK;
+        // assert check();
     }
 
-    private Node deleteMax(Node x) {
-        if (x.right == null) return x.left;
-        x.right = deleteMax(x.right);
-        x.size = size(x.left) + size(x.right) + 1;
-        return x;
+    // delete the key-value pair with the maximum key rooted at h
+    private Node deleteMax(Node h) { 
+        if (isRed(h.left))
+            h = rotateRight(h);
+
+        if (h.right == null)
+            return null;
+
+        if (!isRed(h.right) && !isRed(h.right.left))
+            h = moveRedRight(h);
+
+        h.right = deleteMax(h.right);
+
+        return balance(h);
     }
 
-    public void delete(Key key) {
+    /**
+     * Removes the specified key and its associated value from this symbol table     
+     * (if the key is in this symbol table).    
+     *
+     * @param  key the key
+     * @throws IllegalArgumentException if {@code key} is {@code null}
+     */
+    public void delete(Key key) { 
+        if (key == null) throw new IllegalArgumentException("argument to delete() is null");
+        if (!contains(key)) return;
+
+        // if both children of root are black, set root to red
+        if (!isRed(root.left) && !isRed(root.right))
+            root.color = RED;
+
         root = delete(root, key);
+        if (!isEmpty()) root.color = BLACK;
+        // assert check();
     }
 
-    private Node delete(Node x, Key key) {
-        if (x == null) return null;
-        int cmp = key.compareTo(x.key);
-        if (cmp < 0) {
-            x.left = delete(x.left, key);
-        } else if (cmp > 0) {
-            x.right = delete(x.right, key);
-        } else {
-            if (x.left == null) return x.right;
-            if (x.right == null) return x.left;
-            Node temp = x;
-            x = min(temp.right);
-            x.right = deleteMin(temp.right);
-            x.left = temp.left;
+    // delete the key-value pair with the given key rooted at h
+    private Node delete(Node h, Key key) { 
+        // assert get(h, key) != null;
+
+        if (key.compareTo(h.key) < 0)  {
+            if (!isRed(h.left) && !isRed(h.left.left))
+                h = moveRedLeft(h);
+            h.left = delete(h.left, key);
         }
-        x.size = size(x.left) + size(x.right) + 1;
-        return x;
+        else {
+            if (isRed(h.left))
+                h = rotateRight(h);
+            if (key.compareTo(h.key) == 0 && (h.right == null))
+                return null;
+            if (!isRed(h.right) && !isRed(h.right.left))
+                h = moveRedRight(h);
+            if (key.compareTo(h.key) == 0) {
+                Node x = min(h.right);
+                h.key = x.key;
+                h.value = x.value;
+                // h.value = get(h.right, min(h.right).key);
+                // h.key = min(h.right).key;
+                h.right = deleteMin(h.right);
+            }
+            else h.right = delete(h.right, key);
+        }
+        return balance(h);
     }
 
     public Iterable<Key> keys() {
@@ -306,6 +373,57 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
         if (cmpLow < 0) keys(x.left, queue, low, high);
         if (cmpLow <= 0 && cmpHigh >= 0) queue.enqueue(x.key);
         if (cmpHigh > 0) keys(x.right, queue, low, high);
+    }
+
+    // flip the colors of a node and its two children
+    private void flipColors(Node h) {
+        // h must have opposite color of its two children
+        // assert (h != null) && (h.left != null) && (h.right != null);
+        // assert (!isRed(h) &&  isRed(h.left) &&  isRed(h.right))
+        //    || (isRed(h)  && !isRed(h.left) && !isRed(h.right));
+        h.color = !h.color;
+        h.left.color = !h.left.color;
+        h.right.color = !h.right.color;
+    }
+
+    // Assuming that h is red and both h.left and h.left.left
+    // are black, make h.left or one of its children red.
+    private Node moveRedLeft(Node h) {
+        // assert (h != null);
+        // assert isRed(h) && !isRed(h.left) && !isRed(h.left.left);
+
+        flipColors(h);
+        if (isRed(h.right.left)) { 
+            h.right = rotateRight(h.right);
+            h = rotateLeft(h);
+            flipColors(h);
+        }
+        return h;
+    }
+
+    // Assuming that h is red and both h.right and h.right.left
+    // are black, make h.right or one of its children red.
+    private Node moveRedRight(Node h) {
+        // assert (h != null);
+        // assert isRed(h) && !isRed(h.right) && !isRed(h.right.left);
+        flipColors(h);
+        if (isRed(h.left.left)) { 
+            h = rotateRight(h);
+            flipColors(h);
+        }
+        return h;
+    }
+
+    // restore red-black tree invariant
+    private Node balance(Node h) {
+        // assert (h != null);
+
+        if (isRed(h.right) && !isRed(h.left))    h = rotateLeft(h);
+        if (isRed(h.left) && isRed(h.left.left)) h = rotateRight(h);
+        if (isRed(h.left) && isRed(h.right))     flipColors(h);
+
+        h.size = size(h.left) + size(h.right) + 1;
+        return h;
     }
 
     public static void main(String[] args) {
