@@ -1,16 +1,15 @@
 class Solution {
     public String replaceDigits(String s) {
-        char[] arr = new char[s.length()];
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
+            char temp;
             if (i % 2 == 1) {
-                arr[i] = shift(arr[i-1], Integer.valueOf(String.valueOf(s.charAt(i))));
+                temp = shift(s.charAt(i-1), s.charAt(i) - '0');
             } else {
-                arr[i] = s.charAt(i);
+                temp = s.charAt(i);
             }
-            sb.append(arr[i]);
+            sb.append(temp);
         }
-
         return sb.toString();
     }
 
