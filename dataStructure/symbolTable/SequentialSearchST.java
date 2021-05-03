@@ -1,8 +1,9 @@
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
-
-import edu.princeton.cs.algs4.StdIn;
-import edu.princeton.cs.algs4.StdOut;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * SequentialSearchST
@@ -25,6 +26,8 @@ public class SequentialSearchST<Key, Value> {
     }
 
     public void put(Key key, Value val) {
+        if (key == null)
+            throw new IllegalArgumentException("first argument to put() is null");
         if (val == null) {
             this.delete(key);
             return;
@@ -36,10 +39,12 @@ public class SequentialSearchST<Key, Value> {
             }
         }
         first = new Node(key, val, first);
-        size++;
+        this.size++;
     }
 
     public Value get(Key key) {
+        if (key == null)
+            throw new IllegalArgumentException("argument to get() is null");
         for (Node item = first; item != null; item = item.next) {
             if (item.key.equals(key)) {
                 return item.val;
@@ -49,27 +54,47 @@ public class SequentialSearchST<Key, Value> {
     }
 
     public void delete(Key key) {
-        Node item = first;
-        if (item == null || item.key.equals(key)) {
-            first = null;
+        if (key == null)
+            throw new IllegalArgumentException("argument to delete() is null");
+        if (first == null)
+            return;
+        if (first.key.equals(key)) {
+            first = first.next;
+            this.size--;
             return;
         }
-        while (item.next != null) {
-            if (item.next.key.equals(key)) {
-                item.next = item.next.next;
+        Node current = first;
+        while (current.next != null) {
+            if (current.next.key.equals(key)) {
+                current.next = current.next.next;
+                this.size--;
                 return;
             }
-            item = item.next;
+            current = current.next;
         }
     }
 
+    // public void delete(Key key) {
+    //     if (key == null) throw new IllegalArgumentException("argument to delete() is null");
+    //     first = delete(first, key);
+    // }
+
+    // // delete key in linked list beginning at Node x
+    // // warning: function call stack too large if table is large
+    // private Node delete(Node x, Key key) {
+    //     if (x == null) return null;
+    //     if (key.equals(x.key)) {
+    //         this.size--;
+    //         return x.next;
+    //     }
+    //     x.next = delete(x.next, key);
+    //     return x;
+    // }
+
     public boolean contains(Key key) {
-        for (Node item = first; item != null; item = item.next) {
-            if (item.key.equals(key)) {
-                return true;
-            }
-        }
-        return false;
+        if (key == null)
+            throw new IllegalArgumentException("argument to contains() is null");
+        return get(key) != null;
     }
 
     public boolean isEmpty() {
@@ -110,16 +135,48 @@ public class SequentialSearchST<Key, Value> {
         }
     }
 
-    public static void main(String[] args) {
-        SequentialSearchST<String, Integer> st;
-        st = new SequentialSearchST<>();
-        for (int i = 0; !StdIn.isEmpty() && i < 5; i++) {
-            String key = StdIn.readString();
-            st.put(key, i);
+    /* Test Code Start */
+    private static void testKeys(SequentialSearchST<Integer, Integer> hst) {
+        System.out.print("keys: ");
+        for (Integer key : hst.keys()) {
+            System.out.print(key + " ");
         }
+        System.out.println("size: " + hst.size());
+    }
 
-        for (String s : st.keys()) {
-            StdOut.println(s + " " + st.get(s));
+    private static void randomTest() {
+        System.out.println("Random test start: ");
+        SequentialSearchST<Integer, Integer> hst = new SequentialSearchST<>();
+        List<Integer> ints = new Random().ints(1, 100).limit(10).boxed().collect(Collectors.toList());
+        System.out.println("ints: " + ints);
+        ints.stream().forEach(i -> {
+            hst.put(i, i);
+        });
+        testKeys(hst);
+    }
+
+    private static void deleteTest() {
+        System.out.println();
+        System.out.println("Delete test start: ");
+        SequentialSearchST<Integer, Integer> hst = new SequentialSearchST<>();
+        List<Integer> ints = new Random().ints(1, 100).limit(10).boxed().collect(Collectors.toList());
+        System.out.println("ints: " + ints);
+        ints.stream().forEach(i -> {
+            hst.put(i, i);
+        });
+        testKeys(hst);
+        Collections.shuffle(ints);
+        System.out.println("show delete: ");
+        for (int i : ints) {
+            System.out.println("delete target: " + i);
+            hst.delete(i);
+            testKeys(hst);
         }
+    }
+    /* Test Code End */
+
+    public static void main(String[] args) {
+        randomTest();
+        deleteTest();
     }
 }
