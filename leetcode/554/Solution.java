@@ -73,7 +73,12 @@ class Solution {
         // int[][] wallArr = new int[][] {{1},{1},{1}};
         // int[][] wallArr = new int[][] {{1,2,2,1},{3,1,2},{1,3,2},{2,4},{3,1,2},{1,3,1,1}};
         // int[][] wallArr = new int[][] {{1,2,2,1},{3,1,2}};
-        int[][] wallArr = new int[][] {{Integer.MAX_VALUE, Integer.MAX_VALUE - 2, 2}, {Integer.MAX_VALUE, Integer.MAX_VALUE - 1, 1}, {Integer.MAX_VALUE - 1, Integer.MAX_VALUE, 1}};
+        // int[][] wallArr = new int[][] {{Integer.MAX_VALUE, Integer.MAX_VALUE - 2, 2}, {Integer.MAX_VALUE, Integer.MAX_VALUE - 1, 1}, {Integer.MAX_VALUE - 1, Integer.MAX_VALUE, 1}};
+        int max = Integer.MAX_VALUE;
+        int[][] wallArr = new int[][] {
+            {max,max,max,max,1,2},
+            {2,max,max,max,max,1}
+        };
         for (int[] arr : wallArr) {
             List<Integer> row = new ArrayList<>();
             for (int i : arr) {
