@@ -1,12 +1,11 @@
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 import java.util.stream.Collectors;
-
-import edu.princeton.cs.algs4.SequentialSearchST;
 
 public class SeparateChainingHashST<Key, Value> {
     private int size;
@@ -147,5 +146,7 @@ public class SeparateChainingHashST<Key, Value> {
     public static void main(String[] args) {
         // randomTest();
         deleteTest();
+
+        Map<Integer, Integer> map = new HashMap<>();
     }
 }
