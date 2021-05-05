@@ -6,7 +6,7 @@ class Solution {
     int[][] cost;
     int target;
     int sizeOfHouses;
-    static final int MAX = Integer.MAX_VALUE / 2;
+    static final int INF = (int)Math.pow(10, 6);
     static final int INITIAL_VALUE = -2;
 
     public int minCost(int[] houses, int[][] cost, int m, int n, int target) {
@@ -22,8 +22,8 @@ class Solution {
             }
         }
         int ans = dfs(0, 0, 0);
-        // if the ans is MAX, that means it is without a solution, then return -1
-        if (ans == MAX) {
+        // if the ans is INF, that means it is without a solution, then return -1
+        if (ans == INF) {
             ans = -1;
         }
         return ans;
@@ -34,14 +34,14 @@ class Solution {
             if (preNumOfGroup == target)
                 return 0;
             else
-                return MAX;
+                return INF;
         }
         if (preNumOfGroup > target)
-            return MAX;
+            return INF;
         if (memo[index][preColor][preNumOfGroup] != INITIAL_VALUE)
             return memo[index][preColor][preNumOfGroup];
         // all cost of current and after painted
-        int allCost = MAX;
+        int allCost = INF;
         int sizeOfColors = cost[index].length;
         for (int i = 0; i < sizeOfColors; i++) {
             int colorOfCurHouse = houses[index];
