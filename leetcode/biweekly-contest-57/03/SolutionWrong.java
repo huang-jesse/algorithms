@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class Solution {
+class SolutionWrong {
     public List<List<Long>> splitPainting(int[][] segments) {
         int n = segments.length;
         if (n == 1) {
@@ -160,7 +160,7 @@ class Solution {
     }
 
     public static void main(String[] args) {
-        Solution sol = new Solution();
+        SolutionWrong sol = new SolutionWrong();
         // int[][] segments = {{1,7,9},{6,8,15},{8,10,7}};
         //ans: [[1,6,9],[6,7,24],[7,8,15],[8,10,7]]
         int[][] segments = {{4,5,9},{8,12,5},{4,7,19},{14,15,1},{3,10,8},{17,20,18},{7,19,14},{8,16,6},{14,17,7},{11,13,3}};
