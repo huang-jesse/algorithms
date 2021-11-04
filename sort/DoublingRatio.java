@@ -12,7 +12,7 @@ public class DoublingRatio {
         Stopwatch timer = new Stopwatch();
         // int cnt = ThreeSum.count(a);
         // Quick.sort(a);
-        Insertion.sort(a);
+        Bubble.sort(a);
         return timer.elapsedTime();
     }
 
