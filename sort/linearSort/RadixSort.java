@@ -1,4 +1,4 @@
-package linearSort;
+// package linearSort;
 
 import java.util.List;
 import java.util.Random;
@@ -13,35 +13,30 @@ public class RadixSort {
      * Radix Sort
      * default decimal(10)
      */
-    public static <Item> void sort(Integer[] sortArr, int b) {
+    public static <Item> void sort(Integer[] sortArr, int maxDigits, int radix) {
         int len = sortArr.length;
         int[] auxArr = new int[len];
-        for (int i = 1; i <= b; i++) {
+        for (int i = 0; i < maxDigits; i++) {
             // create auxArr
             for (int j = 0; j < len; j++) {
-                auxArr[j] = getDigitNum(sortArr[j], i);
+                auxArr[j] = getDigitNum(sortArr[j], i, radix);
             }
 
             // sort
-            countingSort(sortArr, auxArr, 10);
+            countingSort(sortArr, auxArr, radix);
         }
 
     }
 
-    private static int getDigitNum(int number, int digit) {
-        int temp = number % (int)(Math.pow(10, digit));
-        if (digit == 1) {
-            return temp;
-        } else {
-            return temp / (int)(Math.pow(10, digit - 1));
-        }
+    private static int getDigitNum(int number, int digit, int radix) {
+        return (number / (int)Math.pow(radix, digit)) % radix;
     }
 
     /**
      * Counting Sort
      * auxArr is the sort base of sortArr
      */
-    public static <Item> void countingSort(Item[] sortArr, int[] auxArr, int k) {
+    public static <Item> void countingSort(Item[] sortArr, int[] auxArr, int radix) {
         int len = sortArr.length;
         // buckup target array of the sort
         Item[] buckupArr = (Item[]) new Object[len];
@@ -50,12 +45,12 @@ public class RadixSort {
         }
 
         // count k for auxArr
-        int[] arrk = new int[k+1];
+        int[] arrk = new int[radix];
         for (int i = 0; i < len; i++) {
             arrk[auxArr[i]]++;
         }
         // accumulate k
-        for (int i = 1; i <= k; i++) {
+        for (int i = 1; i < radix; i++) {
             arrk[i] += arrk[i-1];
         }
 
@@ -70,14 +65,14 @@ public class RadixSort {
         }
     }
 
-    
+
     public static boolean isSorted(Integer[] a) {
         for (int i = 1; i < a.length; i++) {
             if (a[i] < a[i-1]) return false;
         }
         return true;
     }
-    
+
     private static void show(Integer[] a) {
         for (int i = 0; i < a.length; i++) {
             System.out.print(a[i] + " ");
@@ -91,7 +86,7 @@ public class RadixSort {
         int n = 100;
         List<Integer> aList = new Random().ints(1, maxNum).limit(n).boxed().collect(Collectors.toList());
         Integer[] a = aList.toArray(Integer[]::new);
-        sort(a, maxDigits);
+        sort(a, maxDigits, 10);
         System.out.println("Is sorted: " + isSorted(a));
         show(a);
     }
