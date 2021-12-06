@@ -1,2 +1,2 @@
 # Algorithms
-For learning
+For learning 
