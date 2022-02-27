@@ -1,11 +1,13 @@
 import java.util.Arrays;
 
-class Solution {
+class SolutionDFS {
     // Max laps without change tires, when laps large than 20 "fi * ri^(x-1) >= changeTime + fi"
     private static final int MAX_LAPS = 1 << 20;
+    private int[] memo;
     public int minimumFinishTime(int[][] tires, int changeTime, int numLaps) {
         // precompute the minimum time to go around the track x times without changing tires
         int[] minTimesOfXLaps = new int[20+1];
+        memo = new int[numLaps+1];
         Arrays.fill(minTimesOfXLaps, -1);
         for (int[] tire : tires) {
             int fi = tire[0];
@@ -23,29 +25,36 @@ class Solution {
                 total = total + t;
             }
         }
+        return dfs(tires, changeTime, minTimesOfXLaps, numLaps) - changeTime;
+    }
 
-        int[] dp = new int[numLaps+1];
-        Arrays.fill(dp, -1);
-        dp[0] = 0;
-        for (int i = 1; i < numLaps+1; i++) {
-            for (int j = 1; j < 21 && i-j >= 0; j++) {
-                if (minTimesOfXLaps[j] == -1) {
-                    break;
-                }
-                int temp = dp[i-j] + minTimesOfXLaps[j] + changeTime;
-                if (dp[i] == -1 || dp[i] > temp) {
-                    dp[i] = temp;
-                }
-            }
+    private int dfs(int[][] tires, int changeTime, int[] minTimesOfXLaps, int numLaps) {
+        if (numLaps == 0) {
+            return 0;
         }
-        return dp[numLaps] - changeTime;
+        if (memo[numLaps] != 0) {
+            return memo[numLaps];
+        }
+
+        int res = Integer.MAX_VALUE;
+        for (int i = 1; i < Math.min(21, numLaps+1); i++) {
+            if (minTimesOfXLaps[i] == -1) {
+                break;
+            }
+            res = Math.min(res, minTimesOfXLaps[i] + changeTime + dfs(tires, changeTime, minTimesOfXLaps, numLaps-i));
+        }
+        memo[numLaps] = res;
+        return res;
     }
 
     public static void main(String[] args) {
-        Solution sol = new Solution();
+        SolutionDFS sol = new SolutionDFS();
         int[][] tires = {{1,10},{2,2},{3,4}};
         int changeTime = 6;
         int numLaps = 5;
+        // int[][] tires = {{99, 7}};
+        // int changeTime = 85;
+        // int numLaps = 95;
         System.out.println("test: " + sol.minimumFinishTime(tires, changeTime, numLaps));
     }
 }
