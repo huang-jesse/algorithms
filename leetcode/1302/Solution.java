@@ -3,6 +3,41 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+class Solution {
+    public int deepestLeavesSum(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int ans = root.val;
+        while (!queue.isEmpty()) {
+            int levelSize = queue.size();
+            int sum = 0;
+            for (int i = 0; i < levelSize; i++) {
+                TreeNode current = queue.poll();
+                sum += current.val;
+                if (current.left != null) {
+                    queue.offer(current.left);
+                }
+                if (current.right != null) {
+                    queue.offer(current.right);
+                }
+            }
+            ans = sum;
+        }
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        Solution sol = new Solution();
+        // Integer[] nodes = {1, 2, 3, 4, 5, null, 6, 7, null, null, null, null, 8};
+        Integer[] nodes = {6,7,8,2,7,1,3,9,null,1,4,null,null,null,5};
+        TreeNode root = new TreeNode(nodes);
+        System.out.println("test: " + sol.deepestLeavesSum(root));
+    }
+}
+
 /**
  * Definition for a binary tree node.
  */
@@ -77,16 +112,5 @@ class TreeNode {
             }
         }
         return treeNodeStrList.toString();
-    }
-
-    public static void main(String[] args) {
-        // TreeNode root = new TreeNode(1);
-        // root.right = new TreeNode(0);
-        // root.right.left = new TreeNode(0);
-        // root.right.right = new TreeNode(1);
-        // System.out.println("test: " + root);
-        Integer[] nodes = {1,2,3,4,5,null,6,7,null,null,null,null,8};
-        TreeNode root = new TreeNode(nodes);
-        System.out.println("test: " + root);
     }
 }
