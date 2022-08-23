@@ -21,7 +21,7 @@ public class UnionFindSimple {
         }
     }
     public void merge(int i, int j) {
-        fa[find(i)] = fa[find(j)];
+        fa[find(i)] = find(j);
     }
 
     @Override
