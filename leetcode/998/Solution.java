@@ -1,79 +1,31 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.stream.Collectors;
 
 class Solution {
-    class Pair {
-        private TreeNode node;
-        private int row;
-        private int col;
-        public Pair(TreeNode node, int row, int col) {
-            this.node = node;
-            this.row = row;
-            this.col = col;
+    public TreeNode insertIntoMaxTree(TreeNode root, int val) {
+        TreeNode dummy = new TreeNode(0);
+        dummy.right = root;
+        TreeNode curNode = dummy;
+        while (curNode.right != null && curNode.right.val > val) {
+            curNode = curNode.right;
         }
-    }
-    public List<List<String>> printTree(TreeNode root) {
-        // calculate height
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.add(root);
-        int h = -1;
-        while (!queue.isEmpty()) {
-            h++;
-            int size = queue.size();
-            for (int i = 0; i < size; i++) {
-                TreeNode curNode = queue.poll();
-                if (curNode.left != null) {
-                    queue.offer(curNode.left);
-                }
-                if (curNode.right != null) {
-                    queue.offer(curNode.right);
-                }
-            }
-        }
-
-        int m = h + 1;
-        // pow(2, h + 1)
-        int n = (1 << (h + 1)) - 1;
-        Integer[][] metrix = new Integer[m][n];
-        Queue<Pair> treeQueue = new LinkedList<>();
-        treeQueue.offer(new Pair(root, 0, n / 2));
-        while (!treeQueue.isEmpty()) {
-            int size = treeQueue.size();
-            for (int i = 0; i < size; i++) {
-                Pair cur = treeQueue.poll();
-                TreeNode curNode = cur.node;
-                int row = cur.row;
-                int col = cur.col;
-                metrix[row][col] = curNode.val;
-                int offset = 1 << (h - row - 1);
-                if (curNode.left != null) {
-                    treeQueue.offer(new Pair(curNode.left, row + 1, col - offset));
-                }
-                if (curNode.right != null) {
-                    treeQueue.offer(new Pair(curNode.right, row + 1, col + offset));
-                }
-            }
-        }
-
-        List<List<String>> ans = new ArrayList<>();
-        for (int i = 0; i < m; i++) {
-            List<String> rowList = Arrays.stream(metrix[i]).map(num -> {
-                return num == null ? "" : String.valueOf(num);
-            }).collect(Collectors.toList());
-            ans.add(rowList);
-        }
-        return ans;
+        TreeNode insertNode = new TreeNode(val);
+        TreeNode temp = curNode.right;
+        curNode.right = insertNode;
+        insertNode.left = temp;
+        return dummy.right;
     }
 
     public static void main(String[] args) {
         Solution sol = new Solution();
-        Integer[] nodes = {1,2,3,null,4};
-        TreeNode root = new TreeNode(nodes);
-        System.out.println("test: " + sol.printTree(root));
+        Integer[] nums = {5,2,3,null,1};
+        int val = 4;
+        // Integer[] nums = {4,1,3,null,null,2};
+        // int val = 5;
+        TreeNode root = new TreeNode(nums);
+        System.out.println("test: " + sol.insertIntoMaxTree(root, val));
     }
 }
 
@@ -159,8 +111,7 @@ class TreeNode {
         // root.right.left = new TreeNode(0);
         // root.right.right = new TreeNode(1);
         // System.out.println("test: " + root);
-        // Integer[] nodes = {1,2,3,4,5,null,6,7,null,null,null,null,8};
-        Integer[] nodes = {0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,null,0,1,2,3,4,5,6};
+        Integer[] nodes = {1,2,3,4,5,null,6,7,null,null,null,null,8};
         TreeNode root = new TreeNode(nodes);
         System.out.println("test: " + root);
     }
