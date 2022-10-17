@@ -39,7 +39,7 @@ public class SkipList<T> {
             while (cur.forwards[l] != null && cur.forwards[l].key < key) {
                 cur = cur.forwards[l];
             }
-            if (cur.forwards[l] != null && key == cur.forwards[l].key) {
+            if (cur.forwards[l] != null && key.equals(cur.forwards[l].key)) {
                 return false;
             }
             if (l < newNodeMaxLevel) {

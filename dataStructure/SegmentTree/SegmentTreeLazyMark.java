@@ -2,9 +2,17 @@
  * 区间总和线段树，懒标记版本
  */
 class SegmentTreeLazyMark {
-    // 节点对象
+    /**
+     * 节点对象
+     */
     class Node {
+        /**
+         * 当前节点左边界
+         */
         private int s;
+        /**
+         * 当前节点右边界
+         */
         private int t;
         private int val;
         public Node(int s, int t) {
@@ -13,11 +21,17 @@ class SegmentTreeLazyMark {
         }
     }
 
-    // 线段树数组
+    /**
+     * 线段树节点数组
+     */
     private Node[] d;
-    // 原数组
+    /**
+     * 原数组
+     */
     private int[] a;
-    // 懒标记数组
+    /**
+     * 懒标记数组
+     */
     private int[] m;
 
     public SegmentTreeLazyMark(int[] a) {
@@ -110,11 +124,11 @@ class SegmentTreeLazyMark {
         }
 
         int sum = 0;
-        // 如果左子节点代表的区间 [s, m] 与查询区间有交集, 则递归查询左儿子
+        // 如果左子节点代表的区间 [s, m] 与查询区间有交集, 则递归查询左子节点
         if (l <= mid) {
             sum += getSum(l, r, p * 2);
         }
-        // 如果右子节点代表的区间 [m + 1, t] 与查询区间有交集, 则递归查询右儿子
+        // 如果右子节点代表的区间 [m + 1, t] 与查询区间有交集, 则递归查询右子节点
         if (r > mid) {
             sum += getSum(l, r, (p * 2) + 1);
         }
