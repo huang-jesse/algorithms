@@ -7,19 +7,19 @@ class SolutionMonotonicQueue {
     public int[] maxSlidingWindow(int[] nums, int k) {
         int n = nums.length;
         int[] ans = new int[n - k + 1];
-        Deque<Integer> deQueue = new LinkedList<>();
+        Deque<Integer> dequeue = new LinkedList<>();
         for (int i = 0; i < n; i++) {
             int curNum = nums[i];
-            if (!deQueue.isEmpty() && i - deQueue.peekFirst() >= k) {
-                deQueue.pollFirst();
+            if (!dequeue.isEmpty() && i - dequeue.peekFirst() >= k) {
+                dequeue.pollFirst();
             }
-            while(!deQueue.isEmpty() && nums[deQueue.peekLast()] <= curNum) {
-                deQueue.pollLast();
+            while(!dequeue.isEmpty() && nums[dequeue.peekLast()] <= curNum) {
+                dequeue.pollLast();
             }
-            deQueue.offerLast(i);
+            dequeue.offerLast(i);
             int frontIndex = i - k + 1;
             if (frontIndex >= 0) {
-                ans[frontIndex] = nums[deQueue.peekFirst()];
+                ans[frontIndex] = nums[dequeue.peekFirst()];
             }
         }
         return ans;
@@ -27,14 +27,8 @@ class SolutionMonotonicQueue {
 
     public static void main(String[] args) {
         SolutionMonotonicQueue sol = new SolutionMonotonicQueue();
-        int[] nums = {1,3,-1,-3,5,3,6,7};
-        int k = 3;
-        // int[] nums = {1};
-        // int k = 1;
-        // int[] nums = {0,0};
-        // int k = 2;
-        // int[] nums = {0,0};
-        // int k = 1;
+        int[] nums = {1,3,6,2,5,1,7};
+        int k = 4;
         System.out.println("test: " + Arrays.stream(sol.maxSlidingWindow(nums, k)).boxed().collect(Collectors.toList()));
     }
 }
