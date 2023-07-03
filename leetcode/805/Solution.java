@@ -32,10 +32,6 @@ class Solution {
                 return true;
             }
         }
-        int firstHalfSum = 0;
-        for (int i = 0; i < firstHalf; i++) {
-            firstHalfSum += nums[i];
-        }
         // The second half bit manipulation
         int secondHalf = n - firstHalf;
         maskLimit = (1 << secondHalf) - 1;
@@ -49,14 +45,6 @@ class Solution {
             if (tot == 0 || firstHalfSeen.contains(-tot)) {
                 return true;
             }
-        }
-        int secondHalfSum = 0;
-        for (int i = firstHalf; i < n; i++) {
-            secondHalfSum += nums[i];
-        }
-        firstHalfSeen.remove(firstHalfSum);
-        if (secondHalfSum == 0 || firstHalfSeen.contains(-secondHalfSum)) {
-            return true;
         }
         return false;
     }
