@@ -1,24 +1,21 @@
 class SolutionNew {
     public int maxPalindromes(String s, int k) {
         int n = s.length();
-        boolean[][] isPalindromes = new boolean[n][n];
-        // Palindrome
-        for (int i = 0; i < 2 * n - 1; i++) {
-            int leftIndex = i / 2;
-            int rightIndex = i / 2 + i % 2;
-            while (leftIndex >= 0 && rightIndex < n
-                && s.charAt(leftIndex) == s.charAt(rightIndex)) {
-                isPalindromes[leftIndex][rightIndex] = true;
-                leftIndex--;
-                rightIndex++;
+        boolean[][] isPalindrome = new boolean[n][n];
+        for (int num = 0; num < 2 * n - 1; num++) {
+            int l = num / 2;
+            int r = num / 2 + num % 2;
+            while (l >= 0 && r < n && s.charAt(l) == s.charAt(r)) {
+                isPalindrome[l][r] = true;
+                l--;
+                r++;
             }
         }
-        // dp
         int[] dp = new int[n + 1];
         dp[0] = 0;
         for (int i = 0; i < n; i++) {
             for (int j = i - k + 1; j >= 0; j--) {
-                if (isPalindromes[j][i]) {
+                if (isPalindrome[j][i]) {
                     dp[i + 1] = Math.max(dp[i + 1], dp[j] + 1);
                     break;
                 }
