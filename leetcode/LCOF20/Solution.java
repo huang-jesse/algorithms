@@ -56,11 +56,12 @@ class Solution {
 
     public static void main(String[] args) {
         Solution sol = new Solution();
+        String s = "12e+5";
         // String s = "12e+5.4";
         // String s = "-1E-16";
         // String s = "0e";
         // String s = "+-.";
-        String s = " -.";
+        // String s = " -.";
         System.out.println("test: " + sol.isNumber(s));
     }
 }
