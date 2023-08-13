@@ -1,43 +1,37 @@
+import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Deque;
 import java.util.List;
-import java.util.PriorityQueue;
 
 class Solution {
-    public ListNode mergeKLists(ListNode[] lists) {
-        Comparator<ListNode> compare = (o1, o2) -> o1.val - o2.val;
-        PriorityQueue<ListNode> pq = new PriorityQueue<>(compare);
-        for (ListNode node : lists) {
-            if (node != null) {
-                pq.offer(node);
-            }
+    public ListNode doubleIt(ListNode head) {
+        Deque<ListNode> stack = new ArrayDeque<>();
+        ListNode current = head;
+        while (current != null) {
+            stack.push(current);
+            current = current.next;
         }
-        ListNode dummy = new ListNode(-1);
-        ListNode pivot = dummy;
-        while (!pq.isEmpty()) {
-            ListNode temp = pq.poll();
-            ListNode nextNode = temp.next;
-            if (nextNode != null) {
-                pq.offer(nextNode);
-            }
-
-            pivot.next = temp;
-            pivot = pivot.next;
+        int carryDigit = 0;
+        while (!stack.isEmpty()) {
+            ListNode currentNode = stack.pop();
+            carryDigit += currentNode.val * 2;
+            int digit = carryDigit % 10;
+            currentNode.val = digit;
+            carryDigit /= 10;
         }
-        return dummy.next;
+        if (carryDigit > 0) {
+            ListNode newHead = new ListNode(carryDigit);
+            newHead.next = head;
+            head = newHead;
+        }
+        return head;
     }
 
     public static void main(String[] args) {
         Solution sol = new Solution();
-        int n = 3;
-        ListNode[] lists = new ListNode[n];
-        int[] nodes1 = {1,4,5};
-        lists[0] = new ListNode(nodes1);
-        int[] nodes2 = {1,3,4};
-        lists[1] = new ListNode(nodes2);
-        int[] nodes3 = {2,6};
-        lists[2] = new ListNode(nodes3);
-        System.out.println("test: " + sol.mergeKLists(lists));
+        int[] nodes = {9,9,9};
+        ListNode head = new ListNode(nodes);
+        System.out.println("test: " + sol.doubleIt(head));
     }
 }
 
