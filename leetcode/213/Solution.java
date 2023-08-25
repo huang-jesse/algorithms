@@ -35,7 +35,7 @@ class Solution {
 
     public static void main(String[] args) {
         int[] nums = new int[]{1,2,3,1,2,3,3};
-        SolutionDP sol = new SolutionDP();
+        Solution sol = new Solution();
         System.out.println("rob: "+ sol.rob(nums));
     }
 }
