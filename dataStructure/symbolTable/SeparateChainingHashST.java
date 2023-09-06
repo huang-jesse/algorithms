@@ -147,6 +147,6 @@ public class SeparateChainingHashST<Key, Value> {
         // randomTest();
         deleteTest();
 
-        Map<Integer, Integer> map = new HashMap<>();
+        // Map<Integer, Integer> map = new HashMap<>();
     }
 }
