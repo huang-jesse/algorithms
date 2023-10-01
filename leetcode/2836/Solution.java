@@ -29,10 +29,11 @@ class Solution {
             long cur = 0;
             int position = i;
             for (int j = 0; j < m; j++) {
-                // 将 k 拆为二进制为，分别累加每个二进制位的权值
+                // 将 k 拆为二进制为，逐步累加每个二进制位的权值
                 if (((k >> j) & 1) == 1) {
                     // 累加当前二进制位的权值
                     cur += w[position][j];
+                    // 将球传递到下一位置
                     position = f[position][j];
                 }
             }
