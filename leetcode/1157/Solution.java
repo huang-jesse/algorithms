@@ -32,7 +32,8 @@ class MajorityChecker {
 
     private int binarySearchLowerBound(List<Integer> indexes, int target) {
         if (indexes.get(indexes.size() - 1) < target) {
-            return -1;
+            // invalid
+            return indexes.size();
         }
         int low = 0;
         int high = indexes.size() - 1;
@@ -49,6 +50,7 @@ class MajorityChecker {
 
     private int binarySearchUpperBound(List<Integer> indexes, int target) {
         if (indexes.get(0) > target) {
+            // invalid
             return -1;
         }
         int low = 0;
@@ -170,7 +172,7 @@ class MajorityChecker {
         int left = 2;
         int right = 5;
         int threshold = 4;
-        int param_1 = obj.query(left,right,threshold); // 1
+        int param_1 = obj.query(left,right,threshold); // -1
         System.out.println("test: " + param_1);
     }
 }
