@@ -7,63 +7,57 @@ import java.util.*;
 public class Main {
     static FastScanner in = new FastScanner();  // 快读参数
     static PrintWriter out = new PrintWriter(System.out);   // 输出结果参数
-    // letters and numbers
-    private static final int R = 128;
+    static final String YES = "YES";
+    static final String NO = "NO";
+    static final int MAXNUM = (int)(Math.sqrt(1e9)) + 5;
+    static final List<Integer> primes = eulerSieve(MAXNUM);
 
     /**
      * 主逻辑
      * **/
     public static void solve() {
-        String s = in.next();
-        int n = s.length();
-        int[] sa = new int[n * 2 + 1];
-        int[] oldSa = new int[n + 1];
-        int[] rk = new int[n * 2 + 1];
-        int[] oldRk = new int[n * 2 + 1];
-        int[] counter = new int[Math.max(n + 1, R + 1)];
-        // 计数排序（单字符）
-        for (int i = 1; i <= n; i++) {
-            counter[s.charAt(i - 1)]++;
-            rk[i] = s.charAt(i - 1);
-        };
-        for (int i = 1; i < R; i++) counter[i] += counter[i - 1];
-        for (int i = n; i >= 1; i--) sa[counter[rk[i]]--] = i;
-        System.arraycopy(rk, 0, oldRk, 0, n + 1);
-        // 生成 rk （保证字符相同时 rk[i]=rk[j] ）
-        for (int i = 1, rank = 0; i <= n; i++) {
-            if (oldRk[sa[i]] == oldRk[sa[i - 1]]) {
-                rk[sa[i]] = rank;
-            } else {
-                rk[sa[i]] = ++rank;
+        int n = in.nextInt();
+        int[] a = in.readIntArray(n);
+        int m = primes.size();
+        Set<Integer> factors = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m && primes.get(j) <= a[i]; j++) {
+                int p = primes.get(j);
+                if (a[i] % p != 0) continue;
+                while (a[i] % p == 0) a[i] /= p;
+                if (!factors.add(p)) {
+                    out.println(YES);
+                    return;
+                }
+            }
+            if (a[i] != 1 && !factors.add(a[i])) {
+                out.println(YES);
+                return;
             }
         }
-        // 倍增进行第1关键字和第2关键字的计数排序
-        for (int w = 1; w <= n; w = w << 1) {
-            // 对第2关键字 oldsa[i] + w 排序
-            Arrays.fill(counter, 0);
-            System.arraycopy(sa, 0, oldSa, 0, n + 1);
-            for (int i = 1; i <= n; i++) counter[rk[oldSa[i] + w]]++;
-            for (int i = 1; i <= n; i++) counter[i] += counter[i - 1];
-            for (int i = n; i >= 1; i--) sa[counter[rk[oldSa[i] + w]]--] = oldSa[i];
-            // 对第1关键字 oldsa[i] 排序
-            Arrays.fill(counter, 0);
-            System.arraycopy(sa, 0, oldSa, 0, n + 1);
-            for (int i = 1; i <= n; i++) counter[rk[oldSa[i]]]++;
-            for (int i = 1; i <= n; i++) counter[i] += counter[i - 1];
-            for (int i = n; i >= 1; i--) sa[counter[rk[oldSa[i]]]--] = oldSa[i];
-            // 重新计算 rk
-            System.arraycopy(rk, 0, oldRk, 0, n + 1);
-            for (int i = 1, rank = 0; i <= n; i++) {
-                if (oldRk[sa[i]] == oldRk[sa[i - 1]] && oldRk[sa[i] + w] == oldRk[sa[i - 1] + w]) {
-                    rk[sa[i]] = rank;
-                } else {
-                    rk[sa[i]] = ++rank;
+        out.println(NO);
+    }
+
+    private static List<Integer> eulerSieve(int n) {
+        List<Integer> primes = new ArrayList<>();
+        boolean[] notPrime = new boolean[n + 1];
+        for (int i = 2; i <= n; ++i) {
+            if (!notPrime[i]) {
+                primes.add(i);
+            }
+            for (int p : primes) {
+                if (i * p > n) break;
+                notPrime[i * p] = true;
+                if (i % p == 0) {
+                    // i % p == 0
+                    // 换言之，i 之前被 p 筛过了
+                    // 由于 primes 里面质数是从小到大的，所以 i 乘上其他的质数的结果一定会被
+                    // p 的倍数筛掉，就不需要在这里先筛一次，所以这里直接 break 掉就好了
+                    break;
                 }
             }
         }
-        for (int i = 1; i <= n; i++) {
-            out.printf("%d ", sa[i]);
-        }
+        return primes;
     }
 
     /**
@@ -71,7 +65,10 @@ public class Main {
      * T表示测试案例数量 多用于CodeForces 其他OJ需要根据情况进行修改
      * */
     public static void main(String[] args) {
-        solve();
+        int T = in.nextInt();
+        while (T-- > 0) {
+            solve();
+        }
         out.close();
     }
 

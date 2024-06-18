@@ -1,7 +1,0 @@
-/**
- * SuffixArrayBinaryLifting
- */
-public class SuffixArrayBinaryLifting {
-
-
-}
