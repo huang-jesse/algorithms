@@ -35,7 +35,7 @@ class Solution {
     public static void main(String[] args) {
         Solution sol = new Solution();
         int[] nums = {1,1,1,1,1};
-        int target = 2;
+        int target = 3; // 5
         System.out.println("test: " + sol.findTargetSumWays(nums, target));
     }
 }
