@@ -78,7 +78,7 @@ public class SuffixArrayBinaryLifting {
      * @return
      */
     public int index(int i) {
-        return this.sa[i] - 1;
+        return this.sa[i + 1] - 1;
     }
 
     /**
@@ -88,6 +88,6 @@ public class SuffixArrayBinaryLifting {
      * @return
      */
     public int rank(int i) {
-        return this.rk[i] - 1;
+        return this.rk[i + 1] - 1;
     }
 }

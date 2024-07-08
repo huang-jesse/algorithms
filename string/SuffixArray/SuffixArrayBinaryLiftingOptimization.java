@@ -10,6 +10,7 @@ import java.util.Arrays;
 public class SuffixArrayBinaryLiftingOptimization {
     // letters and numbers
     private static final int R = 128;
+    private final String s;
     private final int n;
     private final int[] sa;
     private final int[] oldSa;
@@ -18,6 +19,7 @@ public class SuffixArrayBinaryLiftingOptimization {
     private final int[] counter;
 
     public SuffixArrayBinaryLiftingOptimization(String s) {
+        this.s = s;
         this.n = s.length();
         this.sa = new int[n * 2 + 1];
         this.oldSa = new int[n + 1];
@@ -102,5 +104,82 @@ public class SuffixArrayBinaryLiftingOptimization {
      */
     public int rank(int i) {
         return this.rk[i] - 1;
+    }
+
+    /**
+     * return index arr [left, right] of suffix that starts with target, if no such elements return []
+     * <p> 0-indexed
+     * @param target
+     * @return
+     */
+    public int[] lookup(String target) {
+        int left = binarySearchLeftBound(target);
+        if (left == -1) return new int[]{};
+        int right = binarySearchRightBound(left, target);
+        if (left > right) return new int[]{};
+        return new int[]{left, right};
+    }
+
+    private int binarySearchLeftBound(String target) {
+        if (suffixCompareTo(this.index(this.n - 1), target) < 0) return -1;
+        int l = 0;
+        int r = this.n - 1;
+        while (l < r) {
+            int mid = l + ((r - l) >> 1);
+            int suffixStartIndex = this.index(mid);
+            if (suffixCompareTo(suffixStartIndex, target) >= 0) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return l;
+    }
+
+    private int binarySearchRightBound(int leftLimit, String target) {
+        // not match with target
+        if (!this.s.startsWith(target, this.index(leftLimit))) return -1;
+        int l = leftLimit;
+        int r = this.n - 1;
+        while (l < r) {
+            int mid = l + ((r - l + 1) >> 1);
+            int suffixStartIndex = this.index(mid);
+            if (this.s.startsWith(target, suffixStartIndex)) {
+                l = mid;
+            } else {
+                r = mid - 1;
+            }
+        }
+        return l;
+    }
+
+    /**
+     * suffix[start:-1] compare to target
+     * @param start
+     * @param target
+     * @return
+     */
+    private int suffixCompareTo(int start, String target) {
+        int l = start;
+        int r = Math.min(start + target.length() - 1, this.n - 1);
+        for (int i = l; i <= r; i++) {
+            char c = s.charAt(i);
+            char t = target.charAt(i - start);
+            if (c == t) continue;
+            if (c < t) return -1;
+            if (c > t) return 1;
+        }
+        int suffixLen = this.n - start;
+        if (target.length() > suffixLen) {
+            // suffix[start:-1] < target
+            return -1;
+        } else if (target.length() < suffixLen) {
+            // suffix[start:-1] > target
+            return 1;
+        } else {
+            // target.length() == suffixLen
+            // suffix[start:-1] == target
+            return 0;
+        }
     }
 }
