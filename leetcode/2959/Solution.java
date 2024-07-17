@@ -17,6 +17,7 @@ class Solution {
             edgeArr[road[1]][road[0]] = Math.min(edgeArr[road[1]][road[0]], road[2]);
         }
         int ans = 0;
+        // mask represent nodes that removed
         for (int mask = 0; mask < (1 << n); mask++) {
             // build graph
             Map<Integer, List<int[]>> graph = new HashMap<>();
