@@ -1,10 +1,9 @@
-import edu.princeton.cs.algs4.StdOut;
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.Stopwatch;
+
+import java.util.Random;
 
 public class SortCompareInteger {
     public static double time(String alg, Integer[] a) {
-        Stopwatch timer = new Stopwatch();
+        Timer timer = new Timer();
 
         if (alg.equals("MergeOriginal"))
             MergeOriginal.sort(a);
@@ -16,15 +15,16 @@ public class SortCompareInteger {
             Quick.sort(a);
         if (alg.equals("Quick3Way"))
             Quick3Way.sort(a);
-        return timer.elapsedTime();
+        return (double)timer.elapsed();
     }
 
     public static double timeRandomInput(String alg, int N, int T) {
+        Random random = new Random(37);
         double total = 0.0;
         Integer[] a = new Integer[N];
         for (int t = 0; t < T; t++) {
             for (int i = 0; i < N; i++)
-                a[i] = StdRandom.uniform(100);
+                a[i] = random.nextInt(100);
             total += time(alg, a);
         }
         return total;
@@ -37,10 +37,10 @@ public class SortCompareInteger {
         int T = Integer.parseInt(args[3]);
         double t1 = timeRandomInput(alg1, N, T);
         double t2 = timeRandomInput(alg2, N, T);
-        StdOut.println("t1: " + t1);
-        StdOut.println("t2: " + t2);
-        StdOut.println();
-        StdOut.printf("For %d random Doubles\n %s is", N, alg1);
-        StdOut.printf(" %.1f times faster than %s\n", t2/t1, alg2);
+        System.out.println("t1: " + t1);
+        System.out.println("t2: " + t2);
+        System.out.println();
+        System.out.printf("For %d random Doubles\n %s is", N, alg1);
+        System.out.printf(" %.1f times faster than %s\n", t2/t1, alg2);
     }
 }
