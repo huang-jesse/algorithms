@@ -19,6 +19,7 @@ class SolutionFloyd {
             for (int i = 0; i < n; i++) {
                 if (((mask >> i) & 1) == 0) {
                     Arrays.fill(f[i], INF);
+                    continue;
                 };
                 // add edges
                 for (int j = 0; j < n; j++) {
