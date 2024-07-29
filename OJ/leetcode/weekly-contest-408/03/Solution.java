@@ -1,27 +1,29 @@
 class Solution {
+    private static final char ZERO = '0';
     public int numberOfSubstrings(String s) {
         int n = s.length();
-        int zeroCount = 0;
-        for (int i = 0; i < n; i++) {
-            if (s.charAt(i) == '0') zeroCount++;
-        }
-        int[] zeroIndexes = new int[zeroCount];
-        int zeroIndex = 0;
-        for (int i = 0; i < n; i++) {
-            if (s.charAt(i) == '0') zeroIndexes[zeroIndex++] = i;
-        }
-
-        for (int i = 0; i < zeroCount; i++) {
-            for (int j = i + 1; j < zeroCount; j++) {
-                int zeros = j - i + 1;
-                if (zeros * zeros > (n - zeros)) break;
-
-
+        // next zero index
+        int[] next = new int[n + 1];
+        next[n] = n;
+        for (int i = n - 1; i >= 0; i--) {
+            next[i] = next[i + 1];
+            if (s.charAt(i) == ZERO) {
+                next[i] = i;
             }
         }
-
-
-        return 0;
+        int ans = 0;
+        for (int i = 0; i < n; i++) {
+            int totalLen = n - i + 1;
+            int zeroCount = s.charAt(i) == ZERO ? 1 : 0;
+            for (int j = i; j < n; j = next[j + 1], zeroCount++) {
+                if (zeroCount * zeroCount > (totalLen - zeroCount)) break;
+                int oneCount = (next[j + 1] - i) - zeroCount;
+                if (zeroCount * zeroCount > oneCount) continue;
+                int c = oneCount - zeroCount * zeroCount;
+                ans += Math.min(c + 1, next[j + 1] - j);
+            }
+        }
+        return ans;
     }
 
     public static void main(String[] args) {
