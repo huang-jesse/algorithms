@@ -1,0 +1,87 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.*;
+
+public class Main {
+    static FastScanner in = new FastScanner();  // 快读参数
+    static PrintWriter out = new PrintWriter(System.out);   // 输出结果参数
+    private static final String NOT_POSSIBLE = "-1";
+
+    /**
+     * 主逻辑
+     * **/
+    public static void solve() {
+        long n = in.nextLong(), m = in.nextLong();
+        if ((n ^ m) < n) {
+            // find ans for one time
+            out.println(1);
+            out.printf("%d %d\n", n, m);
+            return;
+        }
+
+        // secondBitMask: 110010 -> 011111
+        long secondBitMask = Long.highestOneBit(n) ^ n;
+        secondBitMask = (Long.highestOneBit(secondBitMask) << 1) - 1;
+        if (secondBitMask < m) {
+            // not possible
+            out.println(NOT_POSSIBLE);
+        } else {
+            //secondBitMask > m
+            // possible get ans in next step
+            out.println(2);
+            out.printf("%d %d %d\n", n, secondBitMask, m);
+        }
+    }
+
+    /**
+     * 运行主函数
+     * T表示测试案例数量 多用于CodeForces 其他OJ需要根据情况进行修改
+     * */
+    public static void main(String[] args) {
+        int T = in.nextInt();
+        while (T-- > 0) {
+            solve();
+        }
+        out.close();
+    }
+
+    /**
+     * 快读模板
+     * */
+    static class FastScanner {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer("");
+
+        // 读取字符串
+        String next() {
+            while (!st.hasMoreTokens()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+
+        // 读取输入的数字
+        int nextInt() { return Integer.parseInt(next()); }
+        long nextLong() { return Long.parseLong(next()); }
+
+        // 读取整型数组
+        int[] readIntArray(int n) {
+            int[] a = new int[n];
+            for (int i = 0; i < n; i++) a[i] = nextInt();
+            return a;
+        }
+
+        long[] readLongArray(int n) {
+            long[] a = new long[n];
+            for (int i = 0; i < n; i++) a[i] = nextLong();
+            return a;
+        }
+    }
+
+}
