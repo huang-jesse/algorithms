@@ -1,60 +1,57 @@
 import java.util.Arrays;
-import java.util.Comparator;
 
 class Solution {
-    private int usedMask = 0;
+    int[] nums;
+    int per, n;
+    boolean[] dp;
+
     public boolean canPartitionKSubsets(int[] nums, int k) {
-        int sum = Arrays.stream(nums).sum();
-        if (sum % k != 0) {
+        this.nums = nums;
+        int all = Arrays.stream(nums).sum();
+        if (all % k != 0) {
             return false;
         }
-        int target = sum / k;
-        nums = Arrays.stream(nums).boxed().sorted(Comparator.reverseOrder()).mapToInt(num -> num).toArray();
-        for (int i = 0; i < k; i++) {
-            if (!backtrack(nums, 0, target, 0)) {
-                return false;
-            }
+        per = all / k;
+        Arrays.sort(nums);
+        n = nums.length;
+        if (nums[n - 1] > per) {
+            return false;
         }
-        return true;
+        dp = new boolean[1 << n];
+        Arrays.fill(dp, true);
+        return dfs((1 << n) - 1, 0);
     }
 
-    private boolean backtrack(int[] nums, int index, int target, int visitedMask) {
-        int n = nums.length;
-        if (index == n) {
-            if (target == 0) {
-                usedMask = usedMask | visitedMask;
-                System.out.println(Integer.toBinaryString(visitedMask));
-                return true;
-            } else {
-                return false;
-            }
+    public boolean dfs(int s, int p) {
+        if (s == 0) {
+            return true;
         }
-        // unvisited
-        boolean res = backtrack(nums, index + 1, target, visitedMask);
-        if (res) {
-            return res;
-        } else if (!isVisited(visitedMask, index) && !isVisited(usedMask, index)) {
-            if (target >= nums[index]) {
-                // visited
-                visitedMask = visitedMask | (1 << index);
-                res = backtrack(nums, index + 1, target - nums[index], visitedMask);
-                // clear mask
-                visitedMask = visitedMask ^ (1 << index);
+        if (!dp[s]) {
+            return dp[s];
+        }
+        dp[s] = false;
+        for (int i = 0; i < n; i++) {
+            int cur = p + nums[i];
+            if (cur > per) {
+                break;
+            }
+            if (((s >> i) & 1) != 0) {
+                if (dfs(s ^ (1 << i), cur == per ? 0 : cur)) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
-    private boolean isVisited(int mask, int index) {
-        return ((mask >> index) & 1) == 1;
-    }
-
     public static void main(String[] args) {
         Solution sol = new Solution();
+        int[] nums = {4,3,2,3,5,2,1};
+        int k = 4; // true
+        // int[] nums = {9,10,1,7,2,7,1,1,1,3};
+        // int k = 3; // true
         // int[] nums = {2,2,2,2,3,4,5};
-        // int k = 4;
-        int[] nums = {9,10,1,7,2,7,1,1,1,3};
-        int k = 3;
+        // int k = 4; // false
         System.out.println("test: " + sol.canPartitionKSubsets(nums, k));
     }
 }
