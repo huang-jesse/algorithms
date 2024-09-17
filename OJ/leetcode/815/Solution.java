@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -48,7 +49,7 @@ class Solution {
     }
 
     private Set<Integer> getNextStations(int[][] routes, Integer currentStation) {
-        Set<Integer> buses = stationsMap.get(currentStation);
+        Set<Integer> buses = stationsMap.getOrDefault(currentStation, Collections.emptySet());
         Set<Integer> nextStations = new HashSet<>();
         for (Integer bus : buses) {
             if (!seenBuses.contains(bus)) {
